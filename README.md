@@ -2,9 +2,11 @@
 
 ## ASP.NET Core MVC + Entity Framework Core (Code First) + SQL Server, desplegada en Microsoft Azure
 
-**Desarrollado por:** _[tu nombre]_
+**Desarrollado por:** Juan David Rosero
 
-**Aplicación en línea:** _https://[nombre-de-tu-app].azurewebsites.net_
+**Aplicación en línea:** https://biblioteca-jdrosero.azurewebsites.net
+
+**Base de datos en la nube:** Azure SQL Database `BibliotecaDb` en el servidor `sql-biblioteca-k6gc7.database.windows.net` (región Brazil South)
 
 ---
 
@@ -124,21 +126,37 @@ dotnet tool install --global dotnet-ef
 
 ## 7. Despliegue en Azure
 
-Recursos usados (todos en el mismo grupo de recursos y región):
+Suscripción **Azure for Students**, grupo de recursos `rg-biblioteca`, región **Brazil South**:
 
-| Recurso | Plan |
-|---|---|
-| Azure SQL Database | Oferta gratuita (serverless, se pausa sola) |
-| Azure App Service (Linux) | F1 gratuito, pila .NET 10 |
+| Recurso | Nombre | Plan |
+|---|---|---|
+| Servidor SQL | `sql-biblioteca-k6gc7` | — |
+| Azure SQL Database | `BibliotecaDb` | Oferta gratuita (serverless GP_S_Gen5, se pausa al agotar el límite gratis) |
+| Plan de App Service | `plan-biblioteca` | F1 gratuito, Linux |
+| Web App | `biblioteca-jdrosero` | Pila .NET 10 (LTS) |
 
-Pasos:
+Comandos usados (Azure CLI):
 
-1. Crear el **grupo de recursos** `rg-biblioteca`.
-2. Crear el **servidor SQL** y la **base de datos** `BibliotecaDb` con la oferta gratuita. En *Redes*, permitir el acceso de los servicios de Azure.
-3. Crear la **Web App** con la pila **.NET 10 (LTS)** en Linux y el plan **F1**.
-4. En la Web App, en **Configuración → Cadenas de conexión**, agregar `DefaultConnection` (tipo *SQLAzure*) con la cadena ADO.NET de la base de datos. La cadena con la contraseña vive solo en Azure, nunca en el repositorio.
-5. En **Centro de implementación**, conectar este repositorio de GitHub (rama `main`). Azure crea un flujo de GitHub Actions que compila y publica en cada `push`.
-6. Al primer arranque la app ejecuta las migraciones y crea las tablas y los datos iniciales en Azure SQL.
+```
+az group create -n rg-biblioteca -l brazilsouth
+
+az sql server create -g rg-biblioteca -n sql-biblioteca-k6gc7 -l brazilsouth --admin-user <usuario> --admin-password <contraseña>
+az sql db create -g rg-biblioteca -s sql-biblioteca-k6gc7 -n BibliotecaDb --edition GeneralPurpose --compute-model Serverless --family Gen5 --capacity 2 --use-free-limit --free-limit-exhaustion-behavior AutoPause
+az sql server firewall-rule create -g rg-biblioteca -s sql-biblioteca-k6gc7 -n AllowAzureServices --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+
+az appservice plan create -g rg-biblioteca -n plan-biblioteca -l brazilsouth --is-linux --sku F1
+az webapp create -g rg-biblioteca -p plan-biblioteca -n biblioteca-jdrosero --runtime "DOTNETCORE:10.0" --https-only true
+az webapp config connection-string set -g rg-biblioteca -n biblioteca-jdrosero -t SQLAzure --settings "DefaultConnection=<cadena ADO.NET de Azure SQL>"
+
+dotnet publish -c Release -o publish
+az webapp deploy -g rg-biblioteca -n biblioteca-jdrosero --src-path app.zip --type zip
+```
+
+- La cadena de conexión con la contraseña solo existe en la configuración del App Service, nunca en el repositorio.
+- Al primer arranque la app ejecuta las migraciones (`db.Database.Migrate()`) y crea las tablas y los datos iniciales en Azure SQL.
+- La primera visita después de un rato puede tardar unos segundos, porque el plan F1 y la base serverless se "duermen" cuando no se usan.
+
+Para ver la base de datos en la nube: Azure Portal → `BibliotecaDb` → **Editor de consultas (versión preliminar)**, e iniciar sesión con la cuenta de Microsoft Entra (administrador del servidor) o con el usuario SQL.
 
 ## 8. Capturas
 
