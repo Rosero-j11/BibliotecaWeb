@@ -1,5 +1,47 @@
+/* ==========================================================================
+   Biblioteca — tema "librería": papel crema, cuero, vino tinto, verde biblioteca y dorado
+   ========================================================================== */
+
+:root {
+  --papel: #f6efe2;
+  --papel-claro: #fffbf3;
+  --pergamino: #efe3cc;
+  --tinta: #2e2219;
+  --tinta-suave: #6b5a4b;
+  --cuero: #3b2417;
+  --cuero-claro: #5a3a28;
+  --vino: #7a2e2a;
+  --vino-oscuro: #5e2220;
+  --verde: #2f5d4e;
+  --verde-oscuro: #234638;
+  --dorado: #c9a14a;
+  --dorado-claro: #e9d39b;
+  --borde: #e3d5bd;
+  --sombra: 0 1px 2px rgba(59, 36, 23, .06), 0 6px 18px rgba(59, 36, 23, .08);
+
+  /* Variables de Bootstrap con la paleta de la biblioteca */
+  --bs-body-bg: var(--papel);
+  --bs-body-color: var(--tinta);
+  --bs-body-font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --bs-primary: #7a2e2a;
+  --bs-primary-rgb: 122, 46, 42;
+  --bs-success: #2f5d4e;
+  --bs-success-rgb: 47, 93, 78;
+  --bs-danger: #b0352b;
+  --bs-danger-rgb: 176, 53, 43;
+  --bs-secondary-color: #6b5a4b;
+  --bs-border-color: #e3d5bd;
+  --bs-link-color: #7a2e2a;
+  --bs-link-color-rgb: 122, 46, 42;
+  --bs-link-hover-color: #5e2220;
+  --bs-link-hover-color-rgb: 94, 34, 32;
+  --bs-border-radius: .6rem;
+}
+
 html {
-  font-size: 14px;
+  font-size: 15px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,48 +50,434 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
-  background-color: #f6f7f9;
+  margin-bottom: 90px;
+  background-color: var(--papel);
+  /* Textura sutil de papel */
+  background-image:
+    radial-gradient(rgba(201, 161, 74, .07) 1px, transparent 1px),
+    radial-gradient(rgba(59, 36, 23, .035) 1px, transparent 1px);
+  background-size: 22px 22px, 37px 37px;
+  background-position: 0 0, 11px 11px;
 }
+
+h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5, .navbar-brand, .titulo-serif {
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--cuero);
+  letter-spacing: .01em;
+}
+
+h1.h3, .h3 {
+  font-weight: 700;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Barra de navegación ---------- */
 
 .bg-biblioteca {
-  background-color: #1f4e5f;
+  background: linear-gradient(180deg, var(--cuero-claro) 0%, var(--cuero) 100%);
+  border-bottom: 3px solid var(--dorado);
+}
+
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--dorado-claro) !important;
+}
+
+.navbar-brand .bi {
+  color: var(--dorado);
+}
+
+.navbar-brand small {
+  font-family: var(--bs-body-font-family);
+  font-size: .7rem;
+  font-weight: 400;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(233, 211, 155, .75);
+}
+
+.navbar-dark .nav-link {
+  white-space: nowrap;
+  color: rgba(255, 248, 235, .82);
+  border-radius: .4rem;
+  padding: .45rem .8rem !important;
+  transition: background-color .15s, color .15s;
+}
+
+.navbar-dark .nav-link:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, .08);
+  text-decoration: none;
 }
 
 .navbar-dark .nav-link.active {
+  color: var(--cuero) !important;
+  background-color: var(--dorado-claro);
   font-weight: 600;
-  border-bottom: 2px solid #f2c14e;
 }
 
-.tarjeta-resumen {
-  border: 0;
-  border-left: 4px solid var(--color-tarjeta, #1f4e5f);
+.btn-dorado {
+  --bs-btn-color: var(--cuero);
+  --bs-btn-bg: var(--dorado);
+  --bs-btn-border-color: var(--dorado);
+  --bs-btn-hover-color: var(--cuero);
+  --bs-btn-hover-bg: var(--dorado-claro);
+  --bs-btn-hover-border-color: var(--dorado-claro);
+  --bs-btn-active-bg: var(--dorado-claro);
+  font-weight: 600;
 }
 
-.tarjeta-resumen .valor {
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1;
-}
+/* ---------- Botones ---------- */
 
-.table thead th {
+.btn {
+  border-radius: .5rem;
+  font-weight: 500;
   white-space: nowrap;
+}
+
+/* En pantallas medianas el menú solo muestra el texto para que quepa en una línea */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .navbar-dark .nav-link .bi {
+    display: none;
+  }
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--vino);
+  --bs-btn-border-color: var(--vino);
+  --bs-btn-hover-bg: var(--vino-oscuro);
+  --bs-btn-hover-border-color: var(--vino-oscuro);
+  --bs-btn-active-bg: var(--vino-oscuro);
+  --bs-btn-active-border-color: var(--vino-oscuro);
+  --bs-btn-disabled-bg: var(--vino);
+  --bs-btn-disabled-border-color: var(--vino);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--vino);
+  --bs-btn-border-color: var(--vino);
+  --bs-btn-hover-bg: var(--vino);
+  --bs-btn-hover-border-color: var(--vino);
+  --bs-btn-active-bg: var(--vino-oscuro);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--cuero-claro);
+  --bs-btn-border-color: #cdb894;
+  --bs-btn-hover-color: var(--cuero);
+  --bs-btn-hover-bg: var(--pergamino);
+  --bs-btn-hover-border-color: #bfa679;
+  --bs-btn-active-bg: var(--pergamino);
+  --bs-btn-active-color: var(--cuero);
+}
+
+.btn-success, .btn-outline-success {
+  --bs-btn-hover-bg: var(--verde);
+  --bs-btn-hover-border-color: var(--verde);
+}
+
+.btn-success {
+  --bs-btn-bg: var(--verde);
+  --bs-btn-border-color: var(--verde);
+  --bs-btn-active-bg: var(--verde-oscuro);
+}
+
+.btn-outline-success {
+  --bs-btn-color: var(--verde);
+  --bs-btn-border-color: var(--verde);
+  --bs-btn-active-bg: var(--verde-oscuro);
+}
+
+.btn-link {
+  --bs-btn-color: var(--tinta-suave);
+  --bs-btn-hover-color: var(--vino);
+}
+
+.btn:focus-visible, .form-control:focus, .form-select:focus, .form-check-input:focus {
+  border-color: var(--dorado);
+  box-shadow: 0 0 0 .2rem rgba(201, 161, 74, .35);
+}
+
+/* ---------- Tarjetas y tablas ---------- */
+
+.card {
+  background-color: var(--papel-claro);
+  border: 1px solid var(--borde);
+  border-radius: .8rem;
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.shadow-sm {
+  box-shadow: var(--sombra) !important;
+}
+
+.card-header {
+  background-color: var(--pergamino) !important;
+  border-bottom: 1px solid var(--borde);
+  font-family: "Playfair Display", Georgia, serif;
+  color: var(--cuero);
+}
+
+.card-footer {
+  background-color: var(--papel-claro) !important;
+  border-top: 1px solid var(--borde);
+}
+
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-hover-bg: rgba(201, 161, 74, .12);
+  --bs-table-border-color: #ecdfc8;
+  color: var(--tinta);
+}
+
+.table thead th,
+.table-light th {
+  --bs-table-bg: var(--pergamino);
+  color: var(--cuero-claro);
+  font-weight: 600;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 2px solid #dcc9a6;
+}
+
+.table td a {
+  font-weight: 600;
 }
 
 .acciones {
   white-space: nowrap;
 }
 
+.acciones .btn {
+  padding: .25rem .5rem;
+}
+
+/* ---------- Formularios ---------- */
+
+.form-control, .form-select {
+  background-color: #fffdf8;
+  border-color: #dccbab;
+  border-radius: .5rem;
+}
+
+.form-label, dt {
+  color: var(--cuero-claro);
+  font-weight: 600;
+}
+
+.form-check-input:checked {
+  background-color: var(--vino);
+  border-color: var(--vino);
+}
+
+/* ---------- Estados, alertas y paginación ---------- */
+
+.badge {
+  font-weight: 600;
+  letter-spacing: .02em;
+  padding: .4em .7em;
+  border-radius: 999px;
+}
+
+.text-bg-primary {
+  background-color: #34586f !important;
+  color: #fff !important;
+}
+
+.alert {
+  border-radius: .7rem;
+  border-width: 1px;
+  border-left-width: 5px;
+}
+
+.alert-success {
+  background-color: #e8f1ec;
+  border-color: #c2dacd;
+  border-left-color: var(--verde);
+  color: var(--verde-oscuro);
+}
+
+.alert-danger {
+  background-color: #f8e7e4;
+  border-color: #ebc6c0;
+  border-left-color: var(--vino);
+  color: var(--vino-oscuro);
+}
+
+.alert-warning {
+  background-color: #fbf2dc;
+  border-color: #ecd9a8;
+  border-left-color: var(--dorado);
+  color: #6b4f12;
+}
+
+.pagination {
+  --bs-pagination-color: var(--vino);
+  --bs-pagination-bg: var(--papel-claro);
+  --bs-pagination-border-color: var(--borde);
+  --bs-pagination-hover-color: var(--vino-oscuro);
+  --bs-pagination-hover-bg: var(--pergamino);
+  --bs-pagination-hover-border-color: var(--borde);
+  --bs-pagination-active-bg: var(--vino);
+  --bs-pagination-active-border-color: var(--vino);
+  --bs-pagination-disabled-bg: var(--papel);
+  --bs-pagination-focus-box-shadow: 0 0 0 .2rem rgba(201, 161, 74, .35);
+}
+
+/* ---------- Panel de inicio ---------- */
+
+.portada {
+  position: relative;
+  border-radius: 1rem;
+  padding: 2rem 2.25rem;
+  color: #fbf3e2;
+  background:
+    linear-gradient(115deg, rgba(47, 93, 78, .96) 0%, rgba(35, 70, 56, .96) 55%, rgba(59, 36, 23, .95) 100%);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.portada::after {
+  /* Lomos de libros decorativos a la derecha */
+  content: "";
+  position: absolute;
+  right: 1.5rem;
+  bottom: 0;
+  width: 220px;
+  height: 85%;
+  opacity: .22;
+  background:
+    linear-gradient(90deg,
+      var(--dorado) 0 14px, transparent 14px 20px,
+      #e9d39b 20px 30px, transparent 30px 36px,
+      var(--vino) 36px 54px, transparent 54px 60px,
+      #fbf3e2 60px 70px, transparent 70px 76px,
+      var(--dorado) 76px 96px, transparent 96px 102px,
+      #e9d39b 102px 112px, transparent 112px 118px,
+      var(--vino) 118px 134px, transparent 134px 140px,
+      #fbf3e2 140px 152px, transparent 152px 158px,
+      var(--dorado) 158px 176px, transparent 176px 182px,
+      #e9d39b 182px 196px, transparent 196px);
+  -webkit-mask: linear-gradient(180deg, transparent 0 8%, #000 8% 100%);
+  mask: linear-gradient(180deg, transparent 0 8%, #000 8% 100%);
+}
+
+.portada h1 {
+  color: #fff8e8;
+  font-size: 2rem;
+}
+
+.portada .lema {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  color: var(--dorado-claro);
+}
+
+.portada .btn-light {
+  --bs-btn-bg: #fbf3e2;
+  --bs-btn-border-color: #fbf3e2;
+  --bs-btn-color: var(--cuero);
+  --bs-btn-hover-bg: #fff;
+}
+
+.portada .btn-outline-light {
+  --bs-btn-color: #fbf3e2;
+  --bs-btn-border-color: rgba(251, 243, 226, .6);
+  --bs-btn-hover-bg: rgba(255, 255, 255, .12);
+  --bs-btn-hover-color: #fff;
+}
+
+.portada > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tarjeta-resumen {
+  border-top: 4px solid var(--color-tarjeta, var(--cuero));
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+a:hover .tarjeta-resumen {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(59, 36, 23, .14);
+}
+
+.tarjeta-resumen .icono {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: var(--color-tarjeta, var(--cuero));
+  background-color: color-mix(in srgb, var(--color-tarjeta, var(--cuero)) 14%, transparent);
+}
+
+.tarjeta-resumen .etiqueta {
+  color: var(--tinta-suave);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.tarjeta-resumen .valor {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cuero);
+}
+
+a:hover .tarjeta-resumen,
+a:hover .tarjeta-resumen * {
+  text-decoration: none;
+}
+
+/* ---------- Encabezado de página y pie ---------- */
+
+.encabezado {
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--borde);
+}
+
+.encabezado h1::before,
+h1.encabezado::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: .9em;
+  margin-right: .6rem;
+  border-radius: 3px;
+  background-color: var(--dorado);
+  vertical-align: -.05em;
+}
+
 .footer {
-  font-size: 0.85rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1.1rem 0;
+  font-size: .85rem;
+  color: rgba(251, 243, 226, .75) !important;
+  background-color: var(--cuero);
+  border-top: 3px solid var(--dorado) !important;
+}
+
+.footer a {
+  color: var(--dorado-claro);
 }
