@@ -1,0 +1,39 @@
+@model Libro
+@{
+    ViewData["Title"] = "Eliminar libro";
+}
+
+<h1 class="h3 mb-3">Eliminar libro</h1>
+
+<div class="card shadow-sm col-lg-6">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Título</dt>
+            <dd class="col-sm-8">@Model.Titulo</dd>
+            <dt class="col-sm-4">Autor</dt>
+            <dd class="col-sm-8">@Model.Autor?.Nombre</dd>
+            <dt class="col-sm-4">Categoría</dt>
+            <dd class="col-sm-8">@Model.Categoria?.Nombre</dd>
+            <dt class="col-sm-4">ISBN</dt>
+            <dd class="col-sm-8">@Model.ISBN</dd>
+            <dt class="col-sm-4">Préstamos</dt>
+            <dd class="col-sm-8">@Model.Prestamos.Count</dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        @if (Model.Prestamos.Any())
+        {
+            <div class="alert alert-warning mb-3">Este libro tiene préstamos en su historial, por eso no se puede eliminar.</div>
+            <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        }
+        else
+        {
+            <p class="mb-3">¿Seguro que desea eliminar este libro? Esta acción no se puede deshacer.</p>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="LibroId" />
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <a asp-action="Index" class="btn btn-link">Cancelar</a>
+            </form>
+        }
+    </div>
+</div>

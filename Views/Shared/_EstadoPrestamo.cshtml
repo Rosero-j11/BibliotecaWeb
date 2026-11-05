@@ -1,0 +1,13 @@
+@model EstadoPrestamo
+@switch (Model)
+{
+    case EstadoPrestamo.Activo:
+        <span class="badge text-bg-primary">Activo</span>
+        break;
+    case EstadoPrestamo.Vencido:
+        <span class="badge text-bg-danger">Vencido</span>
+        break;
+    default:
+        <span class="badge text-bg-success">Devuelto</span>
+        break;
+}

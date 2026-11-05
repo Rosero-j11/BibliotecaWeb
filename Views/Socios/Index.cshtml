@@ -1,0 +1,67 @@
+@model Paginado<Socio>
+@{
+    ViewData["Title"] = "Socios";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <h1 class="h3 mb-0">Socios</h1>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-person-plus"></i> Nuevo socio</a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-sm-8 col-md-6">
+        <input type="search" name="busqueda" value="@ViewData["Busqueda"]" class="form-control" placeholder="Buscar por nombre, documento o correo" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Buscar</button>
+        <a asp-action="Index" class="btn btn-link">Limpiar</a>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Documento</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th class="text-center">Préstamos activos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var socio in Model.Items)
+                {
+                    var activos = socio.Prestamos.Where(p => p.FechaDevolucion == null).ToList();
+                    var vencidos = activos.Count(p => p.Estado == EstadoPrestamo.Vencido);
+                    <tr>
+                        <td><a asp-action="Details" asp-route-id="@socio.SocioId">@socio.Nombre</a></td>
+                        <td>@socio.Documento</td>
+                        <td>@socio.Email</td>
+                        <td>@(socio.Telefono ?? "—")</td>
+                        <td class="text-center">
+                            @activos.Count / @Socio.MaxPrestamosActivos
+                            @if (vencidos > 0)
+                            {
+                                <span class="badge text-bg-danger ms-1">@vencidos vencido(s)</span>
+                            }
+                        </td>
+                        <td class="text-end acciones">
+                            <a asp-controller="Prestamos" asp-action="Create" asp-route-socioId="@socio.SocioId" class="btn btn-sm btn-outline-primary" title="Nuevo préstamo"><i class="bi bi-box-arrow-right"></i></a>
+                            <a asp-action="Edit" asp-route-id="@socio.SocioId" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a asp-action="Delete" asp-route-id="@socio.SocioId" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Items.Any())
+                {
+                    <tr><td colspan="6" class="text-center text-muted py-4">No se encontraron socios.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Paginacion" model="Model.PageInfo" />

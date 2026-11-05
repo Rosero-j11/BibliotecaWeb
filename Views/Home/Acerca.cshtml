@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Acerca del proyecto";
+}
+
+<h1 class="h3 mb-3">Acerca del proyecto</h1>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5">Aplicación web con acceso a datos</h2>
+                <p>Sistema de gestión de una biblioteca: libros, autores, categorías, socios y préstamos, con control de disponibilidad de ejemplares y préstamos vencidos.</p>
+                <h3 class="h6 mt-3">Tecnologías</h3>
+                <ul class="mb-0">
+                    <li>ASP.NET Core MVC (.NET 10)</li>
+                    <li>Entity Framework Core (Code First con migraciones)</li>
+                    <li>SQL Server: LocalDB en desarrollo y Azure SQL Database en la nube</li>
+                    <li>Azure App Service para el despliegue</li>
+                    <li>Bootstrap 5</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5">Modelo de datos</h2>
+                <ul>
+                    <li><strong>Autor</strong> 1 — N <strong>Libro</strong></li>
+                    <li><strong>Categoría</strong> 1 — N <strong>Libro</strong></li>
+                    <li><strong>Socio</strong> N — N <strong>Libro</strong> a través de <strong>Préstamo</strong> (con fechas de préstamo, límite y devolución)</li>
+                </ul>
+                <h3 class="h6 mt-3">Reglas de negocio</h3>
+                <ul class="mb-0">
+                    <li>No se presta un libro sin ejemplares disponibles.</li>
+                    <li>Un socio puede tener máximo 3 préstamos activos y ninguno vencido para pedir otro.</li>
+                    <li>ISBN, documento del socio y nombre de categoría son únicos.</li>
+                    <li>No se eliminan registros que tienen datos relacionados.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

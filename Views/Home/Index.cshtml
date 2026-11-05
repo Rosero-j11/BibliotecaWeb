@@ -1,0 +1,121 @@
+﻿@model InicioViewModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+    <div>
+        <h1 class="h3 mb-0">Panel de la biblioteca</h1>
+        <small class="text-muted">Resumen al @DateTime.Today.ToString("dddd, d 'de' MMMM 'de' yyyy")</small>
+    </div>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" asp-controller="Libros" asp-action="Create"><i class="bi bi-journal-plus"></i> Nuevo libro</a>
+        <a class="btn btn-outline-secondary" asp-controller="Socios" asp-action="Create"><i class="bi bi-person-plus"></i> Nuevo socio</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none" asp-controller="Libros" asp-action="Index">
+            <div class="card tarjeta-resumen shadow-sm h-100" style="--color-tarjeta:#1f4e5f">
+                <div class="card-body">
+                    <div class="text-muted small">Títulos</div>
+                    <div class="valor text-dark">@Model.TotalLibros</div>
+                    <div class="text-muted small">@Model.TotalEjemplares ejemplares</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none" asp-controller="Socios" asp-action="Index">
+            <div class="card tarjeta-resumen shadow-sm h-100" style="--color-tarjeta:#6c757d">
+                <div class="card-body">
+                    <div class="text-muted small">Socios</div>
+                    <div class="valor text-dark">@Model.TotalSocios</div>
+                    <div class="text-muted small">registrados</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none" asp-controller="Prestamos" asp-action="Index" asp-route-estado="Activo">
+            <div class="card tarjeta-resumen shadow-sm h-100" style="--color-tarjeta:#0d6efd">
+                <div class="card-body">
+                    <div class="text-muted small">Préstamos activos</div>
+                    <div class="valor text-dark">@Model.PrestamosActivos</div>
+                    <div class="text-muted small">dentro del plazo</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a class="text-decoration-none" asp-controller="Prestamos" asp-action="Index" asp-route-estado="Vencido">
+            <div class="card tarjeta-resumen shadow-sm h-100" style="--color-tarjeta:#dc3545">
+                <div class="card-body">
+                    <div class="text-muted small">Préstamos vencidos</div>
+                    <div class="valor @(Model.PrestamosVencidos > 0 ? "text-danger" : "text-dark")">@Model.PrestamosVencidos</div>
+                    <div class="text-muted small">por devolver</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold"><i class="bi bi-alarm text-danger"></i> Préstamos vencidos</div>
+            <div class="card-body p-0">
+                @if (!Model.Vencidos.Any())
+                {
+                    <p class="text-muted p-3 mb-0">No hay préstamos vencidos. 🎉</p>
+                }
+                else
+                {
+                    <table class="table table-sm align-middle mb-0">
+                        <thead><tr><th class="ps-3">Libro</th><th>Socio</th><th>Venció</th><th></th></tr></thead>
+                        <tbody>
+                            @foreach (var p in Model.Vencidos)
+                            {
+                                <tr>
+                                    <td class="ps-3">@p.Libro?.Titulo</td>
+                                    <td>@p.Socio?.Nombre</td>
+                                    <td class="text-danger">@p.FechaLimite.ToString("dd/MM/yyyy")<br /><small>@((DateTime.Today - p.FechaLimite).Days) día(s)</small></td>
+                                    <td class="text-end pe-3">
+                                        <form asp-controller="Prestamos" asp-action="Devolver" asp-route-id="@p.PrestamoId" asp-route-volverA="/" method="post">
+                                            <button type="submit" class="btn btn-sm btn-outline-success">Devolver</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white fw-semibold d-flex justify-content-between">
+                <span><i class="bi bi-clock-history"></i> Últimos préstamos</span>
+                <a asp-controller="Prestamos" asp-action="Index" class="small">Ver todos</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm align-middle mb-0">
+                    <thead><tr><th class="ps-3">Libro</th><th>Socio</th><th>Fecha</th><th>Estado</th></tr></thead>
+                    <tbody>
+                        @foreach (var p in Model.Recientes)
+                        {
+                            <tr>
+                                <td class="ps-3"><a asp-controller="Prestamos" asp-action="Details" asp-route-id="@p.PrestamoId">@p.Libro?.Titulo</a></td>
+                                <td>@p.Socio?.Nombre</td>
+                                <td>@p.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                                <td><partial name="_EstadoPrestamo" model="p.Estado" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

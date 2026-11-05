@@ -1,0 +1,54 @@
+@model Paginado<Categoria>
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <h1 class="h3 mb-0">Categorías</h1>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nueva categoría</a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-sm-8 col-md-6">
+        <input type="search" name="busqueda" value="@ViewData["Busqueda"]" class="form-control" placeholder="Buscar por nombre" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Buscar</button>
+        <a asp-action="Index" class="btn btn-link">Limpiar</a>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th class="text-center">Libros</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var categoria in Model.Items)
+                {
+                    <tr>
+                        <td><a asp-action="Details" asp-route-id="@categoria.CategoriaId">@categoria.Nombre</a></td>
+                        <td class="text-muted">@(categoria.Descripcion ?? "—")</td>
+                        <td class="text-center">@categoria.Libros.Count</td>
+                        <td class="text-end acciones">
+                            <a asp-action="Edit" asp-route-id="@categoria.CategoriaId" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <a asp-action="Delete" asp-route-id="@categoria.CategoriaId" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Items.Any())
+                {
+                    <tr><td colspan="4" class="text-center text-muted py-4">No se encontraron categorías.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Paginacion" model="Model.PageInfo" />

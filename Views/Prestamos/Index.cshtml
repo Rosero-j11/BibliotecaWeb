@@ -1,0 +1,77 @@
+@model Paginado<Prestamo>
+@{
+    ViewData["Title"] = "Préstamos";
+    var estado = ViewData["Estado"] as EstadoPrestamo?;
+    var volverA = Context.Request.Path + Context.Request.QueryString;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <h1 class="h3 mb-0">Préstamos</h1>
+    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Nuevo préstamo</a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-5">
+        <input type="search" name="busqueda" value="@ViewData["Busqueda"]" class="form-control" placeholder="Buscar por libro, socio o documento" />
+    </div>
+    <div class="col-md-3">
+        <select name="estado" class="form-select">
+            <option value="">Todos los estados</option>
+            @foreach (var e in Enum.GetValues<EstadoPrestamo>())
+            {
+                <option value="@e" selected="@(estado == e)">@e</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i> Buscar</button>
+        <a asp-action="Index" class="btn btn-link">Limpiar</a>
+    </div>
+</form>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Libro</th>
+                    <th>Socio</th>
+                    <th>Prestado</th>
+                    <th>Límite</th>
+                    <th>Devuelto</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.Items)
+                {
+                    <tr>
+                        <td><a asp-controller="Libros" asp-action="Details" asp-route-id="@p.LibroId">@p.Libro?.Titulo</a></td>
+                        <td><a asp-controller="Socios" asp-action="Details" asp-route-id="@p.SocioId">@p.Socio?.Nombre</a></td>
+                        <td>@p.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                        <td class="@(p.Estado == EstadoPrestamo.Vencido ? "text-danger fw-semibold" : "")">@p.FechaLimite.ToString("dd/MM/yyyy")</td>
+                        <td>@(p.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "—")</td>
+                        <td><partial name="_EstadoPrestamo" model="p.Estado" /></td>
+                        <td class="text-end acciones">
+                            @if (p.FechaDevolucion == null)
+                            {
+                                <form asp-action="Devolver" asp-route-id="@p.PrestamoId" asp-route-volverA="@volverA" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Registrar devolución"><i class="bi bi-box-arrow-in-left"></i> Devolver</button>
+                                </form>
+                            }
+                            <a asp-action="Details" asp-route-id="@p.PrestamoId" class="btn btn-sm btn-outline-secondary" title="Ver detalle"><i class="bi bi-eye"></i></a>
+                            <a asp-action="Delete" asp-route-id="@p.PrestamoId" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Items.Any())
+                {
+                    <tr><td colspan="7" class="text-center text-muted py-4">No se encontraron préstamos.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<partial name="_Paginacion" model="Model.PageInfo" />

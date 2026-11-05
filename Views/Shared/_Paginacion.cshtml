@@ -1,0 +1,36 @@
+@model PageInfo
+@{
+    // Conserva la búsqueda y los filtros actuales al cambiar de página.
+    string UrlPagina(int pagina)
+    {
+        var parametros = Context.Request.Query
+            .Where(q => q.Key != "pagina")
+            .Select(q => new KeyValuePair<string, string?>(q.Key, q.Value.ToString()))
+            .Append(new KeyValuePair<string, string?>("pagina", pagina.ToString()));
+        return Context.Request.Path + QueryString.Create(parametros).ToString();
+    }
+}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-2">
+    <small class="text-muted">
+        @Model.TotalItems registro(s) · página @Model.CurrentPage de @Model.TotalPages
+    </small>
+    @if (Model.TotalPages > 1)
+    {
+        <nav aria-label="Paginación">
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
+                    <a class="page-link" href="@UrlPagina(Model.CurrentPage - 1)">Anterior</a>
+                </li>
+                @for (var i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@UrlPagina(i)">@i</a>
+                    </li>
+                }
+                <li class="page-item @(Model.HasNext ? "" : "disabled")">
+                    <a class="page-link" href="@UrlPagina(Model.CurrentPage + 1)">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

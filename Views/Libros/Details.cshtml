@@ -1,0 +1,68 @@
+@model Libro
+@{
+    ViewData["Title"] = Model.Titulo;
+    var prestados = Model.Prestamos.Count(p => p.FechaDevolucion == null);
+    var disponibles = Model.Ejemplares - prestados;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <h1 class="h3 mb-0">@Model.Titulo</h1>
+    <div>
+        @if (disponibles > 0)
+        {
+            <a asp-controller="Prestamos" asp-action="Create" asp-route-libroId="@Model.LibroId" class="btn btn-primary"><i class="bi bi-box-arrow-right"></i> Prestar</a>
+        }
+        <a asp-action="Edit" asp-route-id="@Model.LibroId" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+        <a asp-action="Index" class="btn btn-link">Volver al listado</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <dl class="mb-0">
+                    <dt>Autor</dt>
+                    <dd><a asp-controller="Autores" asp-action="Details" asp-route-id="@Model.AutorId">@Model.Autor?.Nombre</a></dd>
+                    <dt>Categoría</dt>
+                    <dd><a asp-controller="Categorias" asp-action="Details" asp-route-id="@Model.CategoriaId">@Model.Categoria?.Nombre</a></dd>
+                    <dt>Año de publicación</dt>
+                    <dd>@Model.AnioPublicacion</dd>
+                    <dt>ISBN</dt>
+                    <dd>@Model.ISBN</dd>
+                    <dt>Ejemplares</dt>
+                    <dd>
+                        @Model.Ejemplares en total ·
+                        <span class="badge @(disponibles > 0 ? "text-bg-success" : "text-bg-secondary")">@disponibles disponible(s)</span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-semibold">Historial de préstamos (@Model.Prestamos.Count)</div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light"><tr><th>Socio</th><th>Prestado</th><th>Límite</th><th>Devuelto</th><th>Estado</th></tr></thead>
+                    <tbody>
+                        @foreach (var p in Model.Prestamos.OrderByDescending(p => p.FechaPrestamo))
+                        {
+                            <tr>
+                                <td><a asp-controller="Socios" asp-action="Details" asp-route-id="@p.SocioId">@p.Socio?.Nombre</a></td>
+                                <td>@p.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                                <td>@p.FechaLimite.ToString("dd/MM/yyyy")</td>
+                                <td>@(p.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "—")</td>
+                                <td><partial name="_EstadoPrestamo" model="p.Estado" /></td>
+                            </tr>
+                        }
+                        @if (!Model.Prestamos.Any())
+                        {
+                            <tr><td colspan="5" class="text-center text-muted py-4">Este libro no se ha prestado todavía.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

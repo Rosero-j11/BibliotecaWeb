@@ -1,0 +1,68 @@
+@model Socio
+@{
+    ViewData["Title"] = Model.Nombre;
+    var volverA = Context.Request.Path.ToString();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <h1 class="h3 mb-0">@Model.Nombre</h1>
+    <div>
+        <a asp-controller="Prestamos" asp-action="Create" asp-route-socioId="@Model.SocioId" class="btn btn-primary"><i class="bi bi-box-arrow-right"></i> Nuevo préstamo</a>
+        <a asp-action="Edit" asp-route-id="@Model.SocioId" class="btn btn-outline-secondary"><i class="bi bi-pencil"></i> Editar</a>
+        <a asp-action="Index" class="btn btn-link">Volver al listado</a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <dl class="mb-0">
+                    <dt>Documento</dt>
+                    <dd>@Model.Documento</dd>
+                    <dt>Correo</dt>
+                    <dd>@Model.Email</dd>
+                    <dt>Teléfono</dt>
+                    <dd>@(Model.Telefono ?? "—")</dd>
+                    <dt>Registrado desde</dt>
+                    <dd>@Model.FechaRegistro.ToString("dd/MM/yyyy")</dd>
+                    <dt>Préstamos activos</dt>
+                    <dd>@Model.Prestamos.Count(p => p.FechaDevolucion == null) de @Socio.MaxPrestamosActivos permitidos</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white fw-semibold">Historial de préstamos (@Model.Prestamos.Count)</div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="table-light"><tr><th>Libro</th><th>Prestado</th><th>Límite</th><th>Estado</th><th></th></tr></thead>
+                    <tbody>
+                        @foreach (var p in Model.Prestamos.OrderByDescending(p => p.FechaPrestamo))
+                        {
+                            <tr>
+                                <td><a asp-controller="Libros" asp-action="Details" asp-route-id="@p.LibroId">@p.Libro?.Titulo</a></td>
+                                <td>@p.FechaPrestamo.ToString("dd/MM/yyyy")</td>
+                                <td>@p.FechaLimite.ToString("dd/MM/yyyy")</td>
+                                <td><partial name="_EstadoPrestamo" model="p.Estado" /></td>
+                                <td class="text-end">
+                                    @if (p.FechaDevolucion == null)
+                                    {
+                                        <form asp-controller="Prestamos" asp-action="Devolver" asp-route-id="@p.PrestamoId" asp-route-volverA="@volverA" method="post">
+                                            <button type="submit" class="btn btn-sm btn-outline-success">Devolver</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Prestamos.Any())
+                        {
+                            <tr><td colspan="5" class="text-center text-muted py-4">Este socio no tiene préstamos.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

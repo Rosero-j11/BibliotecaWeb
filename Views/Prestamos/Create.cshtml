@@ -1,0 +1,49 @@
+@model Prestamo
+@{
+    ViewData["Title"] = "Nuevo préstamo";
+}
+
+<h1 class="h3 mb-3">Nuevo préstamo</h1>
+
+<div class="card shadow-sm col-lg-8">
+    <div class="card-body">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="mb-3">
+                <label asp-for="LibroId" class="form-label"></label>
+                <select asp-for="LibroId" class="form-select" asp-items="ViewBag.LibroId">
+                    <option value="0">Seleccione un libro…</option>
+                </select>
+                <span asp-validation-for="LibroId" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="SocioId" class="form-label"></label>
+                <select asp-for="SocioId" class="form-select" asp-items="ViewBag.SocioId">
+                    <option value="0">Seleccione un socio…</option>
+                </select>
+                <span asp-validation-for="SocioId" class="text-danger small"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FechaPrestamo" class="form-label"></label>
+                    <input asp-for="FechaPrestamo" class="form-control" />
+                    <span asp-validation-for="FechaPrestamo" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FechaLimite" class="form-label"></label>
+                    <input asp-for="FechaLimite" class="form-control" />
+                    <span asp-validation-for="FechaLimite" class="text-danger small"></span>
+                </div>
+            </div>
+            <p class="small text-muted">
+                Plazo sugerido: @Prestamo.DiasPorDefecto días. Cada socio puede tener hasta @Socio.MaxPrestamosActivos préstamos activos y ninguno vencido.
+            </p>
+            <button type="submit" class="btn btn-primary">Registrar préstamo</button>
+            <a asp-action="Index" class="btn btn-link">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

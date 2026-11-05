@@ -1,0 +1,33 @@
+@model Prestamo
+@{
+    ViewData["Title"] = "Eliminar préstamo";
+}
+
+<h1 class="h3 mb-3">Eliminar préstamo</h1>
+
+<div class="card shadow-sm col-lg-6">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-5">Libro</dt>
+            <dd class="col-sm-7">@Model.Libro?.Titulo</dd>
+            <dt class="col-sm-5">Socio</dt>
+            <dd class="col-sm-7">@Model.Socio?.Nombre</dd>
+            <dt class="col-sm-5">Fecha de préstamo</dt>
+            <dd class="col-sm-7">@Model.FechaPrestamo.ToString("dd/MM/yyyy")</dd>
+            <dt class="col-sm-5">Estado</dt>
+            <dd class="col-sm-7"><partial name="_EstadoPrestamo" model="Model.Estado" /></dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        @if (Model.FechaDevolucion == null)
+        {
+            <div class="alert alert-warning mb-3">El libro aún no se ha devuelto. Si elimina el préstamo, el ejemplar volverá a quedar disponible sin registrar la devolución.</div>
+        }
+        <p class="mb-3">¿Seguro que desea eliminar este préstamo del historial?</p>
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="PrestamoId" />
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+            <a asp-action="Index" class="btn btn-link">Cancelar</a>
+        </form>
+    </div>
+</div>

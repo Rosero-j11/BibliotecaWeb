@@ -1,0 +1,35 @@
+@model Autor
+@{
+    ViewData["Title"] = "Eliminar autor";
+}
+
+<h1 class="h3 mb-3">Eliminar autor</h1>
+
+<div class="card shadow-sm col-lg-6">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Nombre</dt>
+            <dd class="col-sm-8">@Model.Nombre</dd>
+            <dt class="col-sm-4">Nacionalidad</dt>
+            <dd class="col-sm-8">@(Model.Nacionalidad ?? "—")</dd>
+            <dt class="col-sm-4">Libros</dt>
+            <dd class="col-sm-8">@Model.Libros.Count</dd>
+        </dl>
+    </div>
+    <div class="card-footer bg-white">
+        @if (Model.Libros.Any())
+        {
+            <div class="alert alert-warning mb-3">Este autor tiene libros registrados; primero elimine o reasigne esos libros.</div>
+            <a asp-action="Index" class="btn btn-secondary">Volver</a>
+        }
+        else
+        {
+            <p class="mb-3">¿Seguro que desea eliminar este autor? Esta acción no se puede deshacer.</p>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="AutorId" />
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <a asp-action="Index" class="btn btn-link">Cancelar</a>
+            </form>
+        }
+    </div>
+</div>

@@ -1,0 +1,21 @@
+@model Libro
+@{
+    ViewData["Title"] = "Editar libro";
+}
+
+<h1 class="h3 mb-3">Editar libro</h1>
+
+<div class="card shadow-sm col-lg-8">
+    <div class="card-body">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="LibroId" />
+            <partial name="_Form" model="Model" />
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <a asp-action="Index" class="btn btn-link">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

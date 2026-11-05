@@ -1,0 +1,46 @@
+@model Libro
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+<div class="mb-3">
+    <label asp-for="Titulo" class="form-label"></label>
+    <input asp-for="Titulo" class="form-control" autofocus />
+    <span asp-validation-for="Titulo" class="text-danger small"></span>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label asp-for="AutorId" class="form-label"></label>
+        <select asp-for="AutorId" class="form-select" asp-items="ViewBag.AutorId">
+            <option value="0">Seleccione…</option>
+        </select>
+        <span asp-validation-for="AutorId" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label asp-for="CategoriaId" class="form-label"></label>
+        <select asp-for="CategoriaId" class="form-select" asp-items="ViewBag.CategoriaId">
+            <option value="0">Seleccione…</option>
+        </select>
+        <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-5 mb-3">
+        <label asp-for="ISBN" class="form-label"></label>
+        <input asp-for="ISBN" class="form-control" placeholder="13 dígitos" />
+        <span asp-validation-for="ISBN" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="AnioPublicacion" class="form-label"></label>
+        <input asp-for="AnioPublicacion" class="form-control" />
+        <span asp-validation-for="AnioPublicacion" class="text-danger small"></span>
+    </div>
+    <div class="col-md-3 mb-3">
+        <label asp-for="Ejemplares" class="form-label"></label>
+        <input asp-for="Ejemplares" class="form-control" />
+        <span asp-validation-for="Ejemplares" class="text-danger small"></span>
+    </div>
+</div>
+<p class="small text-muted">
+    ¿Falta el autor o la categoría?
+    <a asp-controller="Autores" asp-action="Create">Crear autor</a> ·
+    <a asp-controller="Categorias" asp-action="Create">Crear categoría</a>
+</p>

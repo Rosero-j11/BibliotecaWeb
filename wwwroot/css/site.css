@@ -1,0 +1,55 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-color: #f6f7f9;
+}
+
+.bg-biblioteca {
+  background-color: #1f4e5f;
+}
+
+.navbar-dark .nav-link.active {
+  font-weight: 600;
+  border-bottom: 2px solid #f2c14e;
+}
+
+.tarjeta-resumen {
+  border: 0;
+  border-left: 4px solid var(--color-tarjeta, #1f4e5f);
+}
+
+.tarjeta-resumen .valor {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.table thead th {
+  white-space: nowrap;
+}
+
+.acciones {
+  white-space: nowrap;
+}
+
+.footer {
+  font-size: 0.85rem;
+}
